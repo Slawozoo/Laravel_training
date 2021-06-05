@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Intervention\Image\Facades\Image;
+
 
 class ProductsController extends Controller
 {
@@ -40,31 +42,80 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'product_name' => 'required|max:255',
+         // return $request;
+         $validated = $request->validate([
+            'product_name' => 'required|max:255|unique:products',
             'product_desc' => 'required',
             'price' => 'required',
             'category_id' => 'required|integer|min:1',
         ],
         [
-            //$validator = Validator::make($input, $rules, $messages = [
-                'required' => 'The :attribute is a required field.',
-                'product_name.required' => 'Product name is must required field'
-            
+            'required' => ':attribute is required',
+            'product_name.required' => 'Product Name is required. Please input it.'
         ]
-    );
-
+        );
         $product = new Product;
         $product->product_name = $request->input('product_name');
         $product->product_desc = $request->input('product_desc');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
+        if ($request->hasFile('image_upload')) {
+            // uploading image to images folder
+            $name = $request->file('image_upload')->getClientOriginalName();
+            $request->file('image_upload')->storeAs('public/images', $name);
+            // crop the image and saving it to thumbnail folder inside images folder
+            // $image_resize = Image::make(storage_path('app/public/images/'.$name));
+            // $image_resize->resize(550, 750);
+            // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            image_crop($name, 550, 750);
+            $product->image = $name;
+        }
+        // return $product;
         if($product->save()){
             return redirect()->route('products_list');
-        }
-        else{
+        }else {
             return redirect()->back();
         }
+        
+    //     $validated = $request->validate([
+    //         'product_name' => 'required|max:255',
+    //         'product_desc' => 'required',
+    //         'price' => 'required',
+    //         'category_id' => 'required|integer|min:1',
+    //     ],
+    //     [
+    //         //$validator = Validator::make($input, $rules, $messages = [
+    //             'required' => 'The :attribute is a required field.',
+    //             'product_name.required' => 'Product name is must required field'
+            
+    //     ]
+    // );
+    
+
+    //     $product = new Product;
+    //     $product->product_name = $request->input('product_name');
+    //     $product->product_desc = $request->input('product_desc');
+    //     $product->price = $request->input('price');
+    //     $product->category_id = $request->input('category_id');
+        
+    //     if ($request->hasFile('image_upload')) {
+    //         // uploading image to images folder
+    //         $name = $request->file('image_upload')->getClientOriginalName();
+    //         $request->file('image_upload')->storeAs('public/images', $name);
+    //         // crop the image and saving it to thumbnail folder inside images folder
+    //         // $image_resize = Image::make(storage_path('app/public/images/'.$name));
+    //         // $image_resize->resize(550, 750);
+    //         // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+    //         image_crop($name, 550, 750);
+    //         $product->image = $name;
+    //     }
+        
+    //     if($product->save()){
+    //         return redirect()->route('products_list');
+    //     }
+    //     else{
+    //         return redirect()->back();
+    //     }
     }
 
     /**

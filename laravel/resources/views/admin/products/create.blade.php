@@ -16,7 +16,7 @@
 
         
             <h2>Create Product</h2>
-            <form action="/admin/products/store" method="POST">
+            <form action="/admin/products/store" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- <x-forms.input type="text" name="_name" /> -->
                 <b>Product Name</b>        : <input type="text" name="product_name" id="" class="form-control" value="{{ old('product_name')}}"
@@ -51,7 +51,10 @@
                      @foreach( $categories as $category)
                         <option value="{{ $category->id}}" {{ $category->id == old('category_id') ? "selected": '' }} >{{$category->category_name}}</option>
                      @endforeach
-                </x-forms.select>
+                     
+                </x-forms.select><br><br>
+                <input type="file" name="image_upload" id="" >
+                
 
         <!-- <select name="category_id" id="">
             <option value="0">Select a category</option>
@@ -63,6 +66,8 @@
                 <input type="submit" name="submit" values="Save" class="form-control">
 
             </form>
+           
+            
         </div>
     </div>
 </div>
