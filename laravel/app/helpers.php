@@ -1,5 +1,5 @@
 <?php
-use Intervention\Image\Facades\Image;
+//use Intervention\Image\Facades\Image;
 use App\Models\Category;
 
 if(!function_exists('image_crop')){

@@ -42,7 +42,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-         // return $request;
+        //  return $request;
          $validated = $request->validate([
             'product_name' => 'required|max:255|unique:products',
             'product_desc' => 'required',
@@ -59,17 +59,21 @@ class ProductsController extends Controller
         $product->product_desc = $request->input('product_desc');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
+       //return $request;
         if ($request->hasFile('image_upload')) {
             // uploading image to images folder
             $name = $request->file('image_upload')->getClientOriginalName();
             $request->file('image_upload')->storeAs('public/images', $name);
             // crop the image and saving it to thumbnail folder inside images folder
-            // $image_resize = Image::make(storage_path('app/public/images/'.$name));
-            // $image_resize->resize(550, 750);
-            // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
-            image_crop($name, 550, 750);
+            $image_resize = Image::make(storage_path('app/public/images/'.$name));
+            $image_resize->resize(550, 750);
+            $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            // image_crop($name, 550, 750);
             $product->image = $name;
         }
+        // else{
+        //     return $request;
+        // }
         // return $product;
         if($product->save()){
             return redirect()->route('products_list');

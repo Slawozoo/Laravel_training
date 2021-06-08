@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\Admin\DashboardController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,9 +17,20 @@ use App\Http\Controllers\Admin\DashboardController;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
+
 Route::get('/', function () {
     $products = Product::all();
-    return view('products',['products' => $products]);
+    return view('home',['products' => $products]);
    
 
 });
@@ -55,21 +65,7 @@ Route::get('/create_post', function(){
 
 });
 
-// Route::get('/get_post', function(){
-//     $posts = Post::get();
-//     //return $posts;
-//     $post1=array(
-//         'post_name' => 'Third Product',
-//         'post_desc' => 'This is the top most wanted product by the customers. This is prodcut a we want to sell. This is a good product.This is the top most wanted product by the customers. This is prodcut a we want to sell. This is a good product.This is the top most wanted product by the customers. This is prodcut a we want to sell. This is a good product.
-//         his product is wanted by mainly man. This is prodcut a we want to sell. This is a good product. This is the top most wanted product by the customers. This is prodcut a we want to sell. This is a good product.This is the top most wanted product by the customers. This is prodcut a we want to sell. This is a good product.'
-//     );
 
-//     $posts = array($post1);
-//     return view('posts', ['posts' => $posts] );
-
-//     //return view($posts);
-
-// });
 
 Route::get('/home', [ProductsController::class, 'index']);
 
@@ -83,6 +79,7 @@ Route::get('/categories/{category}', function(Category $category){
 
 
 //Admin routing
+Route::middleware(['first', 'second'])->group(function () {
 Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/admin/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name('products_list');
@@ -90,3 +87,4 @@ Route::get('/admin/products/create', [App\Http\Controllers\Admin\ProductsControl
 Route::post('/admin/products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store']);
 Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'edit']);
 Route::post('/admin/products/update/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'update']);
+});

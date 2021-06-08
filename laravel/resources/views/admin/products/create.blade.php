@@ -17,6 +17,9 @@
         
             <h2>Create Product</h2>
             <form action="/admin/products/store" method="POST" enctype="multipart/form-data">
+
+           
+                
                 @csrf
                 <!-- <x-forms.input type="text" name="_name" /> -->
                 <b>Product Name</b>        : <input type="text" name="product_name" id="" class="form-control" value="{{ old('product_name')}}"
@@ -53,18 +56,22 @@
                      @endforeach
                      
                 </x-forms.select><br><br>
-                <input type="file" name="image_upload" id="" >
+               
+                {{-- <form action="/admin/products/store" method="POST" enctype="multipart/form-data">    --}}
+                    <input type="file" name="image_upload" id="" >
+                
                 
 
         <!-- <select name="category_id" id="">
             <option value="0">Select a category</option>
-            @foreach( $categories as $category)
+            {{-- @foreach( $categories as $category)
                 <option value="{{ $category->id}}">{{$category->category_name}}</option>
-            @endforeach
+            @endforeach --}}
         </select> -->
                 <br>
                 <input type="submit" name="submit" values="Save" class="form-control">
-
+                {{-- </form> --}}
+                 
             </form>
            
             
