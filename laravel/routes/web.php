@@ -40,15 +40,6 @@ Route::get('/products/{prod}', function (Product $prod) {   //route model bindin
     return view('product',['product' => $prod]);
 });
 
-Route::get('/create_product', function(){
-    Product::create([
-        'product_name' => 'Laptop',
-        'product_desc' => 'This is Dell Laptop with much functionality',
-        'price' => '150000'
-
-    ]);
-
-});
 
 Route::get('/get_product', function(){
     $products = Product::get();
@@ -56,18 +47,16 @@ Route::get('/get_product', function(){
 
 });
 
-Route::get('/create_post', function(){
-    Post::create([
-        'post_name' => 'Update',
-        'post_desc' => 'No stocks available'
 
-    ]);
-
-});
-
+Route::resource('order', App\Http\Controllers\OrderController::class);
+Route::post('cart', [App\Http\Controllers\OrderItemController::class, 'store'])->name('add_to_cart')->middleware('auth');
 
 
 Route::get('/home', [ProductsController::class, 'index']);
+//Route::get('products/search', [ProductsController::class, 'search'])->name('products.search');
+Route::resource('products', ProductsController::class)->only(['index', 'show']);
+Route::get('search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
+
 
 Route::get('/categories/{category}', function(Category $category){
     //$products = Product::whereCategoryId($category->id)->get();

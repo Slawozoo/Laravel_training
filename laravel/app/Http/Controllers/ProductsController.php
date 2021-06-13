@@ -13,4 +13,16 @@ class ProductsController extends Controller
     $products = Product::latest('id')->get();
     return view('home',['products' => $products]);
     }
+
+    public function show(Product $product){
+        
+        
+        return view('product', compact('product') );
+        }
+        public function search(Product $product){
+        
+        
+            return "This is search";
+            }
 }
+

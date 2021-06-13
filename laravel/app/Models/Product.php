@@ -27,4 +27,28 @@ class Product extends Model
     
 
     }
+    public function scopeSearch($query, array $terms){ 
+        $search = $terms['search'];
+        $category = $terms['category'];
+        $query->when($search, function($query) use($search){
+            return $query->where('product_name', 'like', '%'. $search .'%')
+                ->orWhere('product_desc', 'like', '%'. $search .'%');
+        }
+    //     , function($query){
+    //         return $query->where('id', '>', 0);
+    //     }
+    );
+    
+
+    $query->when($category, function($query, $category){
+        return $query->whereCategoryId($category);
+    });
+
+    // if( $search ) {
+    //     $query->where('product_name', 'like', '%'. $search .'%')
+    //         ->orWhere('product_desc', 'like', '%'. $search .'%');
+    // }
+    return $query;
+            
+    }
 }

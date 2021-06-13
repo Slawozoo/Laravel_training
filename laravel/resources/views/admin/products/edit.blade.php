@@ -16,6 +16,7 @@
 
             <h2>Update Product {{$product->product_name}}</h2>
             <form action="/admin/products/update/{{$product->id}}" method="POST">
+                @method("PUT")
                 @csrf
                 <!-- <x-forms.input type="text" name="_name" /> -->
                 <b>Product Name</b>        : <input type="text" name="product_name" id="" class="form-control" value="{{$product->product_name}}"

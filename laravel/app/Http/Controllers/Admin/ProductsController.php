@@ -76,7 +76,7 @@ class ProductsController extends Controller
         // }
         // return $product;
         if($product->save()){
-            return redirect()->route('{{route('admin.products.index')}}');
+            return redirect()->route("{{route('admin.products.index')}}");
         }else {
             return redirect()->back();
         }
